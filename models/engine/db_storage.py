@@ -43,7 +43,7 @@ class DBStorage:
     def all(self, cls=None):
         """query on the current database session"""
         new_dict = {}
-        for clss in models.classes:
+        for clss in classes:
             if cls is None or cls is classes[clss] or cls is clss:
                 objs = self.__session.query(classes[clss]).all()
                 for obj in objs:
@@ -63,7 +63,7 @@ class DBStorage:
     def get(self, cls, id):
         """retrieve an object given the class and id"""
         if cls is not None and id is not None:
-            objs = self.__session.query(classes[cls]).all()
+            objs = self.__session.query(classes[cls.__name__]).all()
             for obj in objs:
                 if obj.id == id:
                     return obj
@@ -73,7 +73,7 @@ class DBStorage:
         """count the number of objects in storage"""
         cnt = 0
         if cls is not None:
-            objs = self.__session.query(classes[cls]).all()
+            objs = self.__session.query(classes[cls.__name__]).all()
             cnt = len(objs)
         else:
             for key, val in classes.items():
