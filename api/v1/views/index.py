@@ -14,6 +14,7 @@ def status():
     """return JSON status of OK"""
     return jsonify({'status': 'OK'})
 
+
 @app_views.route('/stats')
 def storage_stats():
     """retrieves the number of objects in each class"""

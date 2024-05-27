@@ -2,22 +2,33 @@
 """
     app for registering blueprint and starting flask
 """
-from flask import Flask
-app = Flask(__name__)
+from flask import Flask, jsonify
 from models import storage
 from api.v1.views import app_views
 from os import getenv
 
+app = Flask(__name__)
 app.register_blueprint(app_views)
+
 
 @app.teardown_appcontext
 def teardown_db(self):
     """close storage query after each session"""
     storage.close()
 
-def error404_handler():
-    """returns a JSON-formatted 404 status code response"""
 
+@app.errorhandler(404)
+def handle_404_error(e):
+    """returns a JSON-formatted 404 status code response"""
+    response = jsonify({'error': 'Not found'})
+    response.status_code = 404
+    return response
+
+
+@app.route('/api/v1/nop')
+def api_v1_nop():
+    """returns the 404 error via this route"""
+    return handle_404_error(None)
 
 
 if __name__ == "__main__":
