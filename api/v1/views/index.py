@@ -7,7 +7,6 @@
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
-from models import classes
 
 
 @app_views.route('/status')
@@ -25,5 +24,5 @@ def storage_counts():
         'reviews': storage.count('Review'),
         'states': storage.count('State'),
         'users': storage.count('User')
-    }}
+    }
     return jsonify(cls_counts)
