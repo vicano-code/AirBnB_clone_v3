@@ -59,9 +59,10 @@ class DBStorage:
         """commit all changes of the current database session"""
         self.__session.commit()
 
-
     def get(self, cls, id):
         """retrieve an object given the class and id"""
+        if type(cls) is str:
+            cls = classes.get(cls)
         if cls is not None and id is not None:
             objs = self.__session.query(classes[cls.__name__]).all()
             for obj in objs:

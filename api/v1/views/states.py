@@ -16,7 +16,7 @@ def get_state():
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
-def get_state(state_id):
+def get_state_id(state_id):
     """retrieves a state objects give its id"""
     state_obj = storage.get('State', state_id)
     if state_obj is None:
@@ -24,9 +24,9 @@ def get_state(state_id):
     return jsonify(state_obj.to_dict())
 
 
-@app_views.route(/'states/<state_id>', methods=['DELETE'],
+@app_views.route('/states/<state_id>', methods=['DELETE'],
                  strict_slashes=False)
-def del_state_obj(state_id):
+def delete_state(state_id):
     """delete as state object"""
     state_obj = storage.get('State', state_id)
     if state_obj is None:
@@ -50,15 +50,17 @@ def create_state():
         return jsonify(obj.to_dict()), 201
 
 
-@app_views.route('/states/<state_id>', methods=['POST'], strict_slashes=False)
-def update_state():
+@app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
+def update_state(state_id):
     """updates a state object"""
-    if not request.get_json():
-        return jsonify({"error": "NOT a JSON"}), 400
     state_obj = storage.get('State', state_id)
     if state_obj is None:
         abort(404)
     data_obj = request.get_json()
-    obj = data_obj['name']
-    obj.save()
-    return jsonify(obj.to_dict()), 200
+    if not data_obj:
+        return jsonify({"error": "NOT a JSON"}), 400
+    for k, v in data_obj.items():
+        if k not in ['id', 'created_at', 'updated_at']:
+            setattr(state_obj, k, v)
+    state_obj.save()
+    return jsonify(state_obj.to_dict()), 200
