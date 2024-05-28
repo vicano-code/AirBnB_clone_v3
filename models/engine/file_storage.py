@@ -11,6 +11,8 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+from hashlib import md5
+
 
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
@@ -56,7 +58,9 @@ class FileStorage:
 
     def new(self, obj):
         """sets in __objects the obj with key <obj class name>.id"""
-        if obj is not None:
+        if obj:
+            if isinstance(obj, User) and 'password' in obj.__dict__:
+                obj.password = User.hash_password(obj.password)
             key = obj.__class__.__name__ + "." + obj.id
             self.__objects[key] = obj
 
@@ -64,7 +68,7 @@ class FileStorage:
         """serializes __objects to the JSON file (path: __file_path)"""
         json_objects = {}
         for key in self.__objects:
-            json_objects[key] = self.__objects[key].to_dict()
+            json_objects[key] = self.__objects[key].to_dict(include_password=True)
         with open(self.__file_path, 'w') as f:
             json.dump(json_objects, f)
 
