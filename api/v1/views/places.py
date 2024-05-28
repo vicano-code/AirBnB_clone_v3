@@ -61,6 +61,7 @@ def create_place(city_id):
     if user is None:
         abort(404)
 
+    data_obj['city_id'] = city.id
     obj = Place(**data_obj)
     obj.save()
     return jsonify(obj.to_dict()), 201
