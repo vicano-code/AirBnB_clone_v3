@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Handles RESTFul API actions for state view
+Handles RESTFul API actions for Amenity objects view
 """
 from flask import Flask, jsonify, abort, request
 from models import storage

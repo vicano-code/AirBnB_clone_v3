@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Handles RESTFul API actions for state view
+Handles RESTFul API actions for State objects view
 """
 from flask import Flask, jsonify, abort, request
 from models import storage
@@ -10,14 +10,14 @@ from models.state import State
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def get_state():
-    """retrieves the list of all state objects"""
+    """retrieves the list of all State objects"""
     state_list = [obj.to_dict() for obj in storage.all('State').values()]
     return jsonify(state_list)
 
 
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def get_state_id(state_id):
-    """retrieves a state objects give its id"""
+    """retrieves a State objects give its id"""
     state_obj = storage.get('State', state_id)
     if state_obj is None:
         abort(404)
@@ -27,7 +27,7 @@ def get_state_id(state_id):
 @app_views.route('/states/<state_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_state(state_id):
-    """delete as state object"""
+    """delete as State object"""
     state_obj = storage.get('State', state_id)
     if state_obj is None:
         abort(404)
@@ -38,7 +38,7 @@ def delete_state(state_id):
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
-    """creates/post a state object to storage"""
+    """creates/post a State object to storage"""
     try:
         data_obj = request.get_json(force=True)
     except Exception:
@@ -52,7 +52,7 @@ def create_state():
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def update_state(state_id):
-    """updates a state object"""
+    """updates a State object"""
     state_obj = storage.get('State', state_id)
     if state_obj is None:
         abort(404)

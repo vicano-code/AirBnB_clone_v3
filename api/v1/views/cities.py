@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Handles RESTFul API actions for state view
+Handles RESTFul API actions for City objects view
 """
 from flask import Flask, jsonify, abort, request
 from models import storage
@@ -11,7 +11,7 @@ from models.city import City
 @app_views.route('/states/<state_id>/cities', methods=['GET'],
                  strict_slashes=False)
 def get_state_cities(state_id):
-    """retrieves the list of all city objects of a state"""
+    """retrieves the list of all City objects of a state"""
     state = storage.get('State', state_id)
     if state is None:
         abort(404)
@@ -21,7 +21,7 @@ def get_state_cities(state_id):
 
 @app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
 def get_city_by_id(city_id):
-    """retrieves a city object given its id"""
+    """retrieves a City object given its id"""
     city_obj = storage.get('City', city_id)
     if city_obj is None:
         abort(404)
@@ -31,7 +31,7 @@ def get_city_by_id(city_id):
 @app_views.route('/cities/<city_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_city(city_id):
-    """delete as city object"""
+    """delete as City object"""
     city_obj = storage.get('City', city_id)
     if city_obj is None:
         abort(404)
@@ -43,7 +43,7 @@ def delete_city(city_id):
 @app_views.route('/states/<state_id>/cities', methods=['POST'],
                  strict_slashes=False)
 def create_city(state_id):
-    """creates/post a city object to storage"""
+    """creates/post a City object to storage"""
     try:
         data_obj = request.get_json(force=True)
     except Exception:
@@ -61,7 +61,7 @@ def create_city(state_id):
 
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
 def update_city(city_id):
-    """updates a city object"""
+    """updates a City object"""
     city_obj = storage.get('City', city_id)
     if city_obj is None:
         abort(404)
